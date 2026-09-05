@@ -57,12 +57,28 @@
   </div>
 
   <div id="webgl-error" hidden>
-    <div class="card"><h1>WebGL unavailable</h1><p>This 3D build needs a browser/device with WebGL enabled.</p></div>
+    <div class="card"><h1>WebGL startup failed</h1><p>This 3D build could not start its graphics renderer.</p></div>
   </div>
 
   <script type="module">
-    import './compat.js';
-    await import('./game.js');
+    try {
+      await import('./compat.js?v=webgl-preflight-1');
+      await import('./game.js?v=webgl-preflight-1');
+    } catch (error) {
+      console.error('FPS boot failed:', error);
+      const panel = document.getElementById('webgl-error');
+      const paragraph = panel.querySelector('p');
+      const info = window.__fpsWebGLInfo || {};
+      const parts = [
+        `Startup error: ${error?.message || error}`,
+        `Preflight: ${info.kind || 'no WebGL context'}`
+      ];
+      if (info.renderer) parts.push(`Renderer: ${info.renderer}`);
+      if (info.version) parts.push(`Version: ${info.version}`);
+      if (info.errors?.length) parts.push(`Context errors: ${info.errors.join(' | ')}`);
+      paragraph.textContent = parts.join(' — ');
+      panel.hidden = false;
+    }
   </script>
 </body>
 </html>
