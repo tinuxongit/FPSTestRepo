@@ -3,40 +3,63 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#05070a" />
-  <title>Gun FPS Test</title>
+  <meta name="theme-color" content="#0b1117" />
+  <title>Gun FPS Test — 3D</title>
   <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js"
+    }
+  }
+  </script>
 </head>
 <body>
-  <canvas id="game" aria-label="First person shooter game"></canvas>
+  <canvas id="game" aria-label="3D first person shooter game"></canvas>
 
   <div id="hud" aria-hidden="true">
-    <div id="stats">
-      <div>HEALTH <span id="health">100</span></div>
-      <div>AMMO <span id="ammo">12 / 60</span></div>
-      <div>SCORE <span id="score">0</span></div>
-      <div>WAVE <span id="wave">1</span></div>
+    <div class="topbar">
+      <div class="mission">
+        <span class="kicker">LIVE FIRE // TRAINING YARD</span>
+        <strong>WAVE <span id="wave">1</span></strong>
+      </div>
+      <div class="scorebox">SCORE <strong id="score">0</strong></div>
     </div>
-    <div id="crosshair"></div>
+
     <div id="message"></div>
-    <div id="gun">
-      <div id="muzzle"></div>
-      <div class="barrel"></div>
-      <div class="body"></div>
-      <div class="grip"></div>
+    <div id="hitmarker"><i></i><i></i><i></i><i></i></div>
+    <div id="reticle"><i class="r-top"></i><i class="r-right"></i><i class="r-bottom"></i><i class="r-left"></i><b></b></div>
+    <div id="damage-vignette"></div>
+
+    <div class="health-panel">
+      <span class="hud-label">OPERATOR</span>
+      <div class="health-row"><strong id="health">100</strong><span>HP</span></div>
+      <div class="health-track"><div id="health-fill"></div></div>
     </div>
+
+    <div class="ammo-panel">
+      <span class="hud-label">AR-01</span>
+      <div class="ammo-row"><strong id="ammo">30</strong><span>/ <b id="reserve">120</b></span></div>
+      <div id="reload-state">AUTO</div>
+    </div>
+
+    <div class="controls-hint">WASD move · SHIFT sprint · SPACE jump · RMB aim · LMB fire · R reload</div>
   </div>
 
   <div id="overlay">
     <main class="card">
-      <p class="eyebrow">BROWSER FPS PROTOTYPE</p>
-      <h1>Gun FPS Test</h1>
-      <p id="intro-copy">Move with <b>WASD</b>, aim with the mouse, click to shoot, press <b>R</b> to reload, and survive waves of fictional training drones.</p>
-      <button id="start" type="button">CLICK TO PLAY</button>
-      <p class="small">Desktop browser recommended. No libraries, downloads, or external assets.</p>
+      <p class="eyebrow">TRUE 3D WEBGL FPS</p>
+      <h1 id="overlay-title">Gun FPS Test</h1>
+      <p id="intro-copy">A full 3D browser FPS prototype. Move with <b>WASD</b>, look freely with the mouse, sprint with <b>Shift</b>, jump with <b>Space</b>, aim with <b>right click</b>, fire with <b>left click</b>, and reload with <b>R</b>.</p>
+      <button id="start" type="button">ENTER TRAINING YARD</button>
+      <p class="small">Procedural original geometry. Desktop browser recommended. Click the game to capture the mouse; Esc releases it.</p>
     </main>
   </div>
 
-  <script src="game.js"></script>
+  <div id="webgl-error" hidden>
+    <div class="card"><h1>WebGL unavailable</h1><p>This 3D build needs a browser/device with WebGL enabled.</p></div>
+  </div>
+
+  <script type="module" src="game.js"></script>
 </body>
 </html>
