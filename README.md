@@ -12,6 +12,10 @@ A lightweight browser FPS prototype built as a self-contained static site.
 
 ## Play
 
-Open `index.html` in a desktop browser, or publish the repository with GitHub Pages / another static host.
+The repo includes a GitHub Pages workflow. Once Pages is enabled for this repository, the expected URL is:
+
+`https://tinuxongit.github.io/FPSTestRepo/`
+
+You can also open `index.html` locally in a desktop browser.
 
 No dependencies or build step are required.
