@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#0b1117" />
   <title>Gun FPS Test — 3D</title>
   <link rel="stylesheet" href="style.css" />
+  <style>#webgl-error[hidden] { display: none !important; }</style>
   <script type="importmap">
   {
     "imports": {
@@ -62,8 +63,8 @@
 
   <script type="module">
     try {
-      await import('./compat.js?v=webgl-preflight-1');
-      await import('./game.js?v=webgl-preflight-1');
+      await import('./compat.js?v=hidden-fix-1');
+      await import('./game.js?v=hidden-fix-1');
     } catch (error) {
       console.error('FPS boot failed:', error);
       const panel = document.getElementById('webgl-error');
