@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b1117" />
-  <title>Gun FPS Test — 3D</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>#webgl-error[hidden] { display: none !important; }</style>
+  <meta name="theme-color" content="#071019" />
+  <title>Gun FPS Test — Modular 3D</title>
+  <link rel="stylesheet" href="./styles/app.css?v=modular-2" />
   <script type="importmap">
   {
     "imports": {
@@ -16,18 +15,19 @@
   </script>
 </head>
 <body>
-  <canvas id="game" aria-label="3D first person shooter game"></canvas>
+  <canvas id="game" aria-label="3D first person shooter training game"></canvas>
 
   <div id="hud" aria-hidden="true">
     <div class="topbar">
       <div class="mission">
-        <span class="kicker">LIVE FIRE // TRAINING YARD</span>
+        <span class="kicker">LIVE FIRE // MODULAR TRAINING YARD</span>
         <strong>WAVE <span id="wave">1</span></strong>
       </div>
       <div class="scorebox">SCORE <strong id="score">0</strong></div>
     </div>
 
     <div id="message"></div>
+    <div id="kill-feed"></div>
     <div id="hitmarker"><i></i><i></i><i></i><i></i></div>
     <div id="reticle"><i class="r-top"></i><i class="r-right"></i><i class="r-bottom"></i><i class="r-left"></i><b></b></div>
     <div id="damage-vignette"></div>
@@ -39,47 +39,40 @@
     </div>
 
     <div class="ammo-panel">
-      <span class="hud-label">AR-01</span>
-      <div class="ammo-row"><strong id="ammo">30</strong><span>/ <b id="reserve">120</b></span></div>
-      <div id="reload-state">AUTO</div>
+      <span class="hud-label">AR-01 // 5.56 TRAINING</span>
+      <div class="ammo-row"><strong id="ammo">30</strong><span>/ <b id="reserve">150</b></span></div>
+      <div id="weapon-state">AUTO</div>
     </div>
 
-    <div class="controls-hint">WASD move · SHIFT sprint · SPACE jump · RMB aim · LMB fire · R reload</div>
+    <div class="controls-hint">WASD move · SHIFT sprint · CTRL crouch/slide · SPACE jump · RMB aim · LMB fire · R reload</div>
   </div>
 
   <div id="overlay">
     <main class="card">
-      <p class="eyebrow">TRUE 3D WEBGL FPS</p>
+      <p class="eyebrow">TRUE 3D // MODULAR WEBGL FPS</p>
       <h1 id="overlay-title">Gun FPS Test</h1>
-      <p id="intro-copy">A full 3D browser FPS prototype. Move with <b>WASD</b>, look freely with the mouse, sprint with <b>Shift</b>, jump with <b>Space</b>, aim with <b>right click</b>, fire with <b>left click</b>, and reload with <b>R</b>.</p>
-      <button id="start" type="button">ENTER TRAINING YARD</button>
-      <p class="small">Procedural original geometry. Desktop browser recommended. Click the game to capture the mouse; Esc releases it.</p>
+      <p id="overlay-copy">Loading modular training systems…</p>
+      <button id="start-button" type="button">ENTER TRAINING YARD</button>
+      <p class="small">Procedural original geometry and audio · Three.js r162 · build <span id="version">loading</span></p>
     </main>
   </div>
 
-  <div id="webgl-error" hidden>
-    <div class="card"><h1>WebGL startup failed</h1><p>This 3D build could not start its graphics renderer.</p></div>
+  <div id="boot-error" hidden>
+    <div class="card">
+      <p class="eyebrow">BOOT DIAGNOSTIC</p>
+      <h1>3D startup failed</h1>
+      <p>The modular game could not initialize. The exact browser error is below.</p>
+      <pre id="boot-error-detail"></pre>
+    </div>
   </div>
 
   <script type="module">
-    try {
-      await import('./compat.js?v=hidden-fix-1');
-      await import('./game.js?v=hidden-fix-1');
-    } catch (error) {
-      console.error('FPS boot failed:', error);
-      const panel = document.getElementById('webgl-error');
-      const paragraph = panel.querySelector('p');
-      const info = window.__fpsWebGLInfo || {};
-      const parts = [
-        `Startup error: ${error?.message || error}`,
-        `Preflight: ${info.kind || 'no WebGL context'}`
-      ];
-      if (info.renderer) parts.push(`Renderer: ${info.renderer}`);
-      if (info.version) parts.push(`Version: ${info.version}`);
-      if (info.errors?.length) parts.push(`Context errors: ${info.errors.join(' | ')}`);
-      paragraph.textContent = parts.join(' — ');
+    import('./src/main.js?v=modular-2').catch(error => {
+      console.error('Modular FPS boot failed:', error);
+      const panel = document.getElementById('boot-error');
+      document.getElementById('boot-error-detail').textContent = error?.stack || error?.message || String(error);
       panel.hidden = false;
-    }
+    });
   </script>
 </body>
 </html>
