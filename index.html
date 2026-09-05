@@ -60,6 +60,9 @@
     <div class="card"><h1>WebGL unavailable</h1><p>This 3D build needs a browser/device with WebGL enabled.</p></div>
   </div>
 
-  <script type="module" src="game.js"></script>
+  <script type="module">
+    import './compat.js';
+    await import('./game.js');
+  </script>
 </body>
 </html>
