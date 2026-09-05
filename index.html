@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#05070a" />
+  <title>Gun FPS Test</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="game" aria-label="First person shooter game"></canvas>
+
+  <div id="hud" aria-hidden="true">
+    <div id="stats">
+      <div>HEALTH <span id="health">100</span></div>
+      <div>AMMO <span id="ammo">12 / 60</span></div>
+      <div>SCORE <span id="score">0</span></div>
+      <div>WAVE <span id="wave">1</span></div>
+    </div>
+    <div id="crosshair"></div>
+    <div id="message"></div>
+    <div id="gun">
+      <div id="muzzle"></div>
+      <div class="barrel"></div>
+      <div class="body"></div>
+      <div class="grip"></div>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <main class="card">
+      <p class="eyebrow">BROWSER FPS PROTOTYPE</p>
+      <h1>Gun FPS Test</h1>
+      <p id="intro-copy">Move with <b>WASD</b>, aim with the mouse, click to shoot, press <b>R</b> to reload, and survive waves of fictional training drones.</p>
+      <button id="start" type="button">CLICK TO PLAY</button>
+      <p class="small">Desktop browser recommended. No libraries, downloads, or external assets.</p>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
