@@ -1,0 +1,22 @@
+name: Prepare runtime fixture
+on:
+  push:
+    branches: [feature/ashfall-horizon]
+    paths: [.github/workflows/runtime-fixture.yml]
+permissions:
+  contents: read
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Pack pinned dependencies
+        run: |
+          mkdir fixture
+          cd fixture
+          npm pack three@0.162.0 esbuild@0.25.5 @esbuild/linux-x64@0.25.5
+      - uses: actions/upload-artifact@v4
+        with:
+          name: runtime-fixture
+          path: fixture/*.tgz
+          retention-days: 2
