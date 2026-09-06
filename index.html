@@ -10,7 +10,8 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+        "three/": "https://cdn.jsdelivr.net/npm/three@0.162.0/"
       }
     }
   </script>
@@ -70,7 +71,7 @@
 
   <div id="menu" class="overlay show">
     <div class="menu-shell">
-      <div class="menu-topline">TACTICAL COMBAT SIMULATION // BUILD 0.4</div>
+      <div class="menu-topline">TACTICAL COMBAT SIMULATION // BUILD 0.5</div>
       <h1>ASHFALL<br><span>HORIZON</span></h1>
       <p>A modular cinematic sci-fi FPS prototype with class abilities, objective-driven operations, procedural environments, smart combat AI and infinite seeded replays.</p>
       <div id="menu-grid">
@@ -107,6 +108,7 @@
       <div class="eyebrow">OPERATION COMPLETE</div>
       <h2 id="complete-title">VICTORY</h2>
       <p id="complete-stats"></p>
+      <button id="retry-button" class="secondary" style="display:none">RETRY CHECKPOINT</button>
       <button id="continue-button">CONTINUE</button>
     </div>
   </div>

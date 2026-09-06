@@ -14,7 +14,10 @@ const build = await esbuild.build({
   outfile: `${outdir}/main.js`,
   format: 'esm',
   target: ['es2020'],
-  external: ['three'],
+  plugins: [{
+    name: 'external-three-core',
+    setup(build) { build.onResolve({ filter: /^three$/ }, args => ({ path: args.path, external: true })); }
+  }],
   metafile: true,
 });
 
@@ -26,9 +29,10 @@ await writeFile(`${outdir}/app.css`, bundledCss);
 
 let html = await readFile('index.html', 'utf8');
 html = html.replace('./styles/app.css', './assets/app.css').replace('./src/main.js', './assets/main.js');
-await writeFile('dist/index.html', html);
 await writeFile('dist/.nojekyll', '');
 
 const digest = createHash('sha256').update(JSON.stringify(build.metafile)).digest('hex').slice(0, 12);
+html = html.replace('./assets/app.css', `./assets/app.css?v=${digest}`).replace('./assets/main.js', `./assets/main.js?v=${digest}`);
+await writeFile('dist/index.html', html);
 await writeFile('dist/build.json', JSON.stringify({ digest, builtAt: new Date().toISOString() }, null, 2));
 console.log(`Built Ashfall Horizon ${digest}`);
