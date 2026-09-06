@@ -56,7 +56,7 @@ export class AshfallGame {
   }
   preview(){if(this.world.operation?.id!==CITY_OPERATION.id||this.world.quality!==this.view.quality)this.world.build(CITY_OPERATION,this.view.quality);this.player.configure(CLASSES.vanguard,this.world.layout.start);this.player.pitch=.12;this.player.updateCamera();this.weapon.group.visible=false;this.setState('menu');}
   start(operation,classId,fromAct=0){
-    this.clearSession();this.audio.start();if(this.audio.master)this.audio.master.gain.value=this.profile.settings.volume*.35;
+    this.clearSession();this.audio.start();this.audio.setMasterVolume(this.profile.settings.volume*.35);
     this.operation=operation;this.classId=CLASSES[classId]?classId:'vanguard';this.profile.lastClass=this.classId;saveProfile(this.profile);
     if(this.world.operation?.id!==operation.id||this.world.quality!==this.view.quality)this.world.build(operation,this.view.quality);const start=fromAct>0&&operation.acts[fromAct-1]?.point?{x:operation.acts[fromAct-1].point[0],z:operation.acts[fromAct-1].point[1]}:this.world.layout.start;
     this.player.configure(CLASSES[this.classId],start);this.weapon.configure(CLASSES[this.classId]);this.abilities.configure(CLASSES[this.classId]);this.enemies.reset(operation.difficulty);
