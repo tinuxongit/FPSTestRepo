@@ -1,78 +1,124 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#071019" />
-  <title>Gun FPS Test — Modular 3D</title>
-  <link rel="stylesheet" href="./styles/app.css?v=modular-2" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#02040a" />
+  <meta name="description" content="Ashfall Horizon — a modular cinematic sci-fi FPS prototype." />
+  <title>ASHFALL: HORIZON</title>
+  <link rel="stylesheet" href="./styles/app.css" />
   <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js"
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js"
+      }
     }
-  }
   </script>
 </head>
 <body>
-  <canvas id="game" aria-label="3D first person shooter training game"></canvas>
+  <canvas id="game"></canvas>
+  <div id="fx-vignette"></div>
+  <div id="fx-flash"></div>
+  <div id="damage-vignette"></div>
 
-  <div id="hud" aria-hidden="true">
-    <div class="topbar">
-      <div class="mission">
-        <span class="kicker">LIVE FIRE // MODULAR TRAINING YARD</span>
-        <strong>WAVE <span id="wave">1</span></strong>
+  <header id="hud-top">
+    <section id="mission-card" class="hud-card">
+      <div class="eyebrow" id="operation-label">OPERATION</div>
+      <h1 id="mission-name">ASHFALL: HORIZON</h1>
+      <div id="objectives"></div>
+    </section>
+    <section id="compass" class="hud-card slim">
+      <div id="compass-strip"></div>
+    </section>
+    <section id="status-card" class="hud-card right">
+      <div class="eyebrow">UNITED FRONT</div>
+      <div id="class-name">VANGUARD</div>
+      <div id="rank-label">RANK 1</div>
+    </section>
+  </header>
+
+  <aside id="minimap-wrap" class="hud-card">
+    <canvas id="minimap" width="220" height="220"></canvas>
+  </aside>
+
+  <div id="crosshair" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><i></i>
+  </div>
+
+  <div id="interaction-prompt" class="hud-card prompt" hidden></div>
+  <div id="subtitle" hidden></div>
+  <div id="killfeed"></div>
+  <div id="boss-health" hidden><span id="boss-name"></span><b><i id="boss-fill"></i></b></div>
+
+  <footer id="hud-bottom">
+    <section id="player-status" class="hud-card">
+      <div class="row"><span>ARMOR</span><strong id="armor">100</strong></div>
+      <div class="bar"><i id="armor-fill"></i></div>
+      <div class="row"><span>HEALTH</span><strong id="health">100</strong></div>
+      <div class="bar health"><i id="health-fill"></i></div>
+      <div class="ability-row">
+        <span id="ability-key">Q</span>
+        <div><b id="ability-name">OVERDRIVE</b><small id="ability-state">READY</small></div>
       </div>
-      <div class="scorebox">SCORE <strong id="score">0</strong></div>
-    </div>
+    </section>
+    <section id="ammo-status" class="hud-card right">
+      <div class="weapon-label" id="weapon-name">VX-12 RIFLE</div>
+      <div class="ammo-line"><strong id="ammo">32</strong><span>/</span><b id="reserve">320</b></div>
+      <div id="weapon-mode">AUTO</div>
+    </section>
+  </footer>
 
-    <div id="message"></div>
-    <div id="kill-feed"></div>
-    <div id="hitmarker"><i></i><i></i><i></i><i></i></div>
-    <div id="reticle"><i class="r-top"></i><i class="r-right"></i><i class="r-bottom"></i><i class="r-left"></i><b></b></div>
-    <div id="damage-vignette"></div>
-
-    <div class="health-panel">
-      <span class="hud-label">OPERATOR</span>
-      <div class="health-row"><strong id="health">100</strong><span>HP</span></div>
-      <div class="health-track"><div id="health-fill"></div></div>
-    </div>
-
-    <div class="ammo-panel">
-      <span class="hud-label">AR-01 // 5.56 TRAINING</span>
-      <div class="ammo-row"><strong id="ammo">30</strong><span>/ <b id="reserve">150</b></span></div>
-      <div id="weapon-state">AUTO</div>
-    </div>
-
-    <div class="controls-hint">WASD move · SHIFT sprint · CTRL crouch/slide · SPACE jump · RMB aim · LMB fire · R reload</div>
-  </div>
-
-  <div id="overlay">
-    <main class="card">
-      <p class="eyebrow">TRUE 3D // MODULAR WEBGL FPS</p>
-      <h1 id="overlay-title">Gun FPS Test</h1>
-      <p id="overlay-copy">Loading modular training systems…</p>
-      <button id="start-button" type="button">ENTER TRAINING YARD</button>
-      <p class="small">Procedural original geometry and audio · Three.js r162 · build <span id="version">loading</span></p>
-    </main>
-  </div>
-
-  <div id="boot-error" hidden>
-    <div class="card">
-      <p class="eyebrow">BOOT DIAGNOSTIC</p>
-      <h1>3D startup failed</h1>
-      <p>The modular game could not initialize. The exact browser error is below.</p>
-      <pre id="boot-error-detail"></pre>
+  <div id="menu" class="overlay show">
+    <div class="menu-shell">
+      <div class="menu-topline">TACTICAL COMBAT SIMULATION // BUILD 0.4</div>
+      <h1>ASHFALL<br><span>HORIZON</span></h1>
+      <p>A modular cinematic sci-fi FPS prototype with class abilities, objective-driven operations, procedural environments, smart combat AI and infinite seeded replays.</p>
+      <div id="menu-grid">
+        <section class="panel">
+          <h2>OPERATION</h2>
+          <select id="operation-select"></select>
+          <p id="operation-description"></p>
+        </section>
+        <section class="panel">
+          <h2>CLASS</h2>
+          <div id="class-picker"></div>
+          <p id="class-description"></p>
+        </section>
+      </div>
+      <div class="menu-actions">
+        <button id="deploy-button">DEPLOY</button>
+        <button id="endless-button" class="secondary">ENDLESS FRONT</button>
+      </div>
+      <small class="controls">WASD MOVE · SHIFT SPRINT · CTRL SLIDE · SPACE JUMP · RMB AIM · LMB FIRE · R RELOAD · Q ABILITY · E INTERACT · ESC PAUSE</small>
     </div>
   </div>
 
-  <script type="module">
-    import('./src/main.js?v=modular-2').catch(error => {
-      console.error('Modular FPS boot failed:', error);
-      const panel = document.getElementById('boot-error');
-      document.getElementById('boot-error-detail').textContent = error?.stack || error?.message || String(error);
-      panel.hidden = false;
-    });
-  </script>
+  <div id="pause-menu" class="overlay">
+    <div class="pause-card panel">
+      <div class="eyebrow">TACTICAL LINK PAUSED</div>
+      <h2>PAUSED</h2>
+      <button id="resume-button">RESUME</button>
+      <button id="return-button" class="secondary">RETURN TO OPERATIONS</button>
+    </div>
+  </div>
+
+  <div id="mission-complete" class="overlay">
+    <div class="pause-card panel">
+      <div class="eyebrow">OPERATION COMPLETE</div>
+      <h2 id="complete-title">VICTORY</h2>
+      <p id="complete-stats"></p>
+      <button id="continue-button">CONTINUE</button>
+    </div>
+  </div>
+
+  <div id="boot-error" class="overlay" hidden>
+    <div class="pause-card panel">
+      <div class="eyebrow">RUNTIME FAILURE</div>
+      <h2>GRAPHICS STARTUP FAILED</h2>
+      <pre id="boot-error-text"></pre>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

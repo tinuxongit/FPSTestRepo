@@ -1,0 +1,2 @@
+import * as THREE from 'three';
+export function instancedBoxes(scene,items,geometry,material){const mesh=new THREE.InstancedMesh(geometry,material,items.length),m=new THREE.Matrix4(),q=new THREE.Quaternion(),s=new THREE.Vector3(),p=new THREE.Vector3();items.forEach((it,i)=>{p.set(it.x,it.y,it.z);q.setFromEuler(new THREE.Euler(0,it.ry||0,0));s.set(it.sx||1,it.sy||1,it.sz||1);m.compose(p,q,s);mesh.setMatrixAt(i,m);});mesh.castShadow=true;mesh.receiveShadow=true;scene.add(mesh);return mesh;}

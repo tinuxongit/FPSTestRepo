@@ -1,80 +1,17 @@
 export class Input {
-  constructor(canvas, events) {
-    this.canvas = canvas;
-    this.events = events;
-    this.keys = new Set();
-    this.pressedKeys = new Set();
-    this.buttons = new Set();
-    this.pressedButtons = new Set();
-    this.mouseDX = 0;
-    this.mouseDY = 0;
-    this.pointerLocked = false;
-
-    addEventListener('keydown', event => {
-      if (!this.keys.has(event.code)) this.pressedKeys.add(event.code);
-      this.keys.add(event.code);
-      if (['Space', 'ArrowUp', 'ArrowDown'].includes(event.code)) event.preventDefault();
-    });
-    addEventListener('keyup', event => this.keys.delete(event.code));
-    addEventListener('blur', () => this.resetTransient());
-
-    addEventListener('mousemove', event => {
-      if (!this.pointerLocked) return;
-      this.mouseDX += event.movementX;
-      this.mouseDY += event.movementY;
-    });
-
-    canvas.addEventListener('mousedown', event => {
-      if (!this.pointerLocked) return;
-      if (!this.buttons.has(event.button)) this.pressedButtons.add(event.button);
-      this.buttons.add(event.button);
-    });
-    addEventListener('mouseup', event => this.buttons.delete(event.button));
-    canvas.addEventListener('contextmenu', event => event.preventDefault());
-
-    document.addEventListener('pointerlockchange', () => {
-      this.pointerLocked = document.pointerLockElement === canvas;
-      this.events.emit('input:pointerlock', { locked: this.pointerLocked });
-      if (!this.pointerLocked) this.resetTransient();
-    });
+  constructor(canvas) {
+    this.canvas = canvas; this.keys = new Set(); this.pressed = new Set(); this.buttons = new Set(); this.mouseDX = 0; this.mouseDY = 0;
+    window.addEventListener('keydown', e => { if (!this.keys.has(e.code)) this.pressed.add(e.code); this.keys.add(e.code); });
+    window.addEventListener('keyup', e => this.keys.delete(e.code));
+    window.addEventListener('mousedown', e => this.buttons.add(e.button)); window.addEventListener('mouseup', e => this.buttons.delete(e.button));
+    window.addEventListener('mousemove', e => { if (document.pointerLockElement === canvas) { this.mouseDX += e.movementX; this.mouseDY += e.movementY; } });
+    window.addEventListener('contextmenu', e => e.preventDefault());
   }
-
-  isDown(code) { return this.keys.has(code); }
-  isButtonDown(button) { return this.buttons.has(button); }
-
-  wasPressed(code) {
-    const value = this.pressedKeys.has(code);
-    this.pressedKeys.delete(code);
-    return value;
-  }
-
-  wasButtonPressed(button) {
-    const value = this.pressedButtons.has(button);
-    this.pressedButtons.delete(button);
-    return value;
-  }
-
-  consumeMouseDelta() {
-    const delta = { x: this.mouseDX, y: this.mouseDY };
-    this.mouseDX = 0;
-    this.mouseDY = 0;
-    return delta;
-  }
-
-  async requestLock() {
-    try {
-      const result = this.canvas.requestPointerLock({ unadjustedMovement: false });
-      if (result?.then) await result;
-    } catch {
-      this.canvas.requestPointerLock();
-    }
-  }
-
-  resetTransient() {
-    this.buttons.clear();
-    this.pressedButtons.clear();
-    this.pressedKeys.clear();
-    this.mouseDX = 0;
-    this.mouseDY = 0;
-  }
+  down(code) { return this.keys.has(code); }
+  wasPressed(code) { return this.pressed.has(code); }
+  button(index) { return this.buttons.has(index); }
+  consumeLook() { const d = { x: this.mouseDX, y: this.mouseDY }; this.mouseDX = this.mouseDY = 0; return d; }
+  endFrame() { this.pressed.clear(); }
+  lock() { return this.canvas.requestPointerLock(); }
+  get locked() { return document.pointerLockElement === this.canvas; }
 }

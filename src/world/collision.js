@@ -1,0 +1,2 @@
+export function circleAabb(x,z,r,b){const nx=Math.max(b.minX,Math.min(x,b.maxX)),nz=Math.max(b.minZ,Math.min(z,b.maxZ));const dx=x-nx,dz=z-nz;return dx*dx+dz*dz<r*r;}
+export function segmentAabb(a,b,box){const steps=Math.max(3,Math.ceil(Math.hypot(b.x-a.x,b.z-a.z)/.6));for(let i=0;i<=steps;i++){const t=i/steps,x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;if(x>=box.minX&&x<=box.maxX&&z>=box.minZ&&z<=box.maxZ)return true;}return false;}

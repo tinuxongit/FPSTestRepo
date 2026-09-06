@@ -1,0 +1,3 @@
+import { chromium } from 'playwright';
+import { spawn } from 'node:child_process';
+const server = spawn(process.execPath,['scripts/serve.mjs'],{stdio:'inherit'});await new Promise(r=>setTimeout(r,800));const browser=await chromium.launch({headless:true,args:['--use-gl=swiftshader','--enable-webgl','--ignore-gpu-blocklist']});const page=await browser.newPage({viewport:{width:1440,height:900}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:4173',{waitUntil:'networkidle'});await page.screenshot({path:'test-results/menu.png'});console.log({errors,title:await page.title()});await browser.close();server.kill();if(errors.length)process.exitCode=1;
