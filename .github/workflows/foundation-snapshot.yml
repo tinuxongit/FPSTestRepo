@@ -1,0 +1,19 @@
+name: Foundation snapshot
+on:
+  push:
+    branches: [polish/fps-foundations]
+    paths: [.github/workflows/foundation-snapshot.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundation-source
+          path: |
+            .
+            !.git
+          retention-days: 1
